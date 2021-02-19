@@ -14,7 +14,8 @@
 sed -i 's/192.168.1.1/192.168.2.188/g' package/base-files/files/bin/config_generate
 
 # Modify 活动连接 数值
-sed -e "s/net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max/net.netfilter.nf_conntrack_max net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max \| head -n 1/" -i "/usr/lib/lua/luci/view/admin_status/index.htm"
+#F大源代码 sed -e "s/net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max/net.netfilter.nf_conntrack_max net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max \| head -n 1/" -i "/usr/lib/lua/luci/view/admin_status/index.htm"
+sed -i 's/net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max/net.netfilter.nf_conntrack_max net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max/g' package/base-files/files/usr/lib/lua/luci/view/admin_status/index.htm
 
 # Clone community packages to package/community
 mkdir package/community
@@ -132,7 +133,7 @@ popd
 #popd
 
 # Change default shell to zsh
-#sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd
+sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd
 
 # 修复核心及添加温度显示
 sed -i 's|pcdata(boardinfo.system or "?")|luci.sys.exec("uname -m") or "?"|g' feeds/luci/modules/luci-mod-admin-full/luasrc/view/admin_status/index.htm

@@ -15,8 +15,8 @@ sed -i 's/192.168.1.1/192.168.2.188/g' package/base-files/files/bin/config_gener
 
 # Modify 活动连接 数值
 #F大源代码 sed -e "s/net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max/net.netfilter.nf_conntrack_max net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max \| head -n 1/" -i "/usr/lib/lua/luci/view/admin_status/index.htm"
-sed -i 's/net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max/net.netfilter.nf_conntrack_max net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max/g' package/base-files/files/usr/lib/lua/luci/view/admin_status/index.htm
-
+#sed -i 's/net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max/net.netfilter.nf_conntrack_max net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max/g' package/base-files/files/usr/lib/lua/luci/view/admin_status/index.htm
+sed -i 's/net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max/net.netfilter.nf_conntrack_max net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max | head -n 1/g' package/base-files/files/usr/lib/lua/luci/view/admin_status/index.htm
 # Clone community packages to package/community
 mkdir package/community
 pushd package/community

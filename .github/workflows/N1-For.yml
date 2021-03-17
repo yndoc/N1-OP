@@ -26,11 +26,11 @@ env:
   CONFIG_FILE: .config
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
-  UPLOAD_BIN_DIR: ture
+  UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
-  UPLOAD_RELEASE: ture
+  UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
 
 jobs:
@@ -69,7 +69,8 @@ jobs:
         $GITHUB_WORKSPACE/$DIY_P1_SH
 
     - name: Update feeds
-      run: cd openwrt && ./scripts/feeds update -a && git clone https://github.com/tuanqing/install-program package/install-program
+      run: cd openwrt && ./scripts/feeds update -a
+      #  && git clone https://github.com/tuanqing/install-program package/install-program
 
     - name: Install feeds
       run: cd openwrt && ./scripts/feeds install -a
@@ -116,7 +117,7 @@ jobs:
     - name: Remove files
       if: steps.compile.outputs.status == 'success'
       run: |
-        #rm -rf openwrt/bin/targets/armvirt/64/openwrt-armvirt-64-default.manifest
+        rm -rf openwrt/bin/targets/armvirt/64/openwrt-armvirt-64-default.manifest
         rm -rf openwrt/bin/targets/armvirt/64/openwrt-armvirt-64-Image
         rm -rf openwrt/bin/targets/armvirt/64/openwrt-armvirt-64-Image-initramfs
         rm -rf openwrt/bin/targets/armvirt/64/openwrt-armvirt-64-root.squashfs.gz
@@ -124,6 +125,24 @@ jobs:
         cd openwrt/bin/targets/*/*
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
   
+    - name: Delete IPK
+      if: env.DELETE_IPK == 'true' && !cancelled()
+      run: |
+        cd openwrt/bin/targets/*/*
+        rm -rf packages
+
+    - name: Upload firmware to release
+      if: env.RELEASE == 'true' && !cancelled()
+      uses: ncipollo/release-action@v1
+      with:
+        name: ${{ env.DATE }} 🚀 / N1-Openwrt | 编译
+        allowUpdates: true
+        tag: ${{ env.tag_name }}
+        commit: master
+        token: ${{ secrets.RELEASES_TOKEN  }}
+        body: |
+          当前使用版本:（编译前的最后一次源码更新记录）
+        artifacts: "${{ env.FIRMWARE }}/*.tar.gz,${{ env.FIRMWARE }}/*.tar.xz"  
 
     - name: Upload bin directory
       uses: actions/upload-artifact@main
@@ -185,19 +204,6 @@ jobs:
 #        tag_name: ${{ steps.tag.outputs.release_tag }}
 #        body_path: release.txt
 #        files: ${{ env.FIRMWARE }}/*
-
-    - name: Upload firmware to release
-      if: env.RELEASE == 'true' && !cancelled()
-      uses: ncipollo/release-action@v1
-      with:
-        name: ${{ env.DATE }}  / N1-Openwrt | 编译
-        allowUpdates: true
-        tag: ${{ env.tag_name }}
-        commit: master
-        token: ${{ secrets.RELEASES_TOKEN  }}
-        body: |
-          当前使用版本:（编译前的最后一次源码更新记录）
-        artifacts: "${{ env.FIRMWARE }}/*.tar.gz,${{ env.FIRMWARE }}/*.tar.xz"  
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main

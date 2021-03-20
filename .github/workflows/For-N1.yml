@@ -185,6 +185,7 @@ jobs:
         echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
         echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
 
+
     - name: Generate release tag
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
@@ -194,12 +195,11 @@ jobs:
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
         [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
         echo "::set-output name=status::success"
-
     - name: Upload firmware to release
       uses: softprops/action-gh-release@v1
       if: steps.tag.outputs.status == 'success' && !cancelled()
-     env:
-        GITHUB_TOKEN: ${{ secrets.RELEASES_TOKEN }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       with:
         tag_name: ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
@@ -218,4 +218,4 @@ jobs:
         keep_latest: 3
         delete_tags: true
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}

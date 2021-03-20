@@ -131,18 +131,18 @@ jobs:
         cd openwrt/bin/targets/*/*
         rm -rf packages
 
-    - name: Upload firmware to release
-      if: steps.tag.outputs.status == 'success' && !cancelled()
-      uses: softprops/action-gh-release@v1
-      with:
-        name: ${{ env.DATE }} 🚀 / N1-Openwrt | 编译
-        allowUpdates: true
-        tag: ${{ env.tag_name }}
-        commit: master
-        GITHUB_TOKEN: ${{ secrets.RELEASES_TOKEN  }}
-        body: |
-          当前使用版本:（编译前的最后一次源码更新记录）
-        artifacts: "${{ env.FIRMWARE }}/*.tar.gz,${{ env.FIRMWARE }}/*.tar.xz"
+ #   - name: Upload firmware to release
+ #     if: steps.tag.outputs.status == 'success' && !cancelled()
+ #     uses: softprops/action-gh-release@v1
+#      with:
+#        name: ${{ env.DATE }} 🚀 / N1-Openwrt | 编译
+#        allowUpdates: true
+#        tag: ${{ env.tag_name }}
+ #       commit: master
+ #       GITHUB_TOKEN: ${{ secrets.RELEASES_TOKEN  }}
+#        body: |
+   #       当前使用版本:（编译前的最后一次源码更新记录）
+#        artifacts: "${{ env.FIRMWARE }}/*.tar.gz,${{ env.FIRMWARE }}/*.tar.xz"
 
     - name: Upload bin directory
       uses: actions/upload-artifact@main
@@ -185,25 +185,25 @@ jobs:
         echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
         echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
 
-#    - name: Generate release tag
-#      id: tag
-#      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-#      run: |
-#        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
-#        touch release.txt
-#        [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
-#        [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
-#        echo "::set-output name=status::success"
+    - name: Generate release tag
+      id: tag
+      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
+      run: |
+        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
+        touch release.txt
+        [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
+        [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
+        echo "::set-output name=status::success"
 
-#    - name: Upload firmware to release
-#      uses: softprops/action-gh-release@v1
-#      if: steps.tag.outputs.status == 'success' && !cancelled()
-#     env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      with:
-#        tag_name: ${{ steps.tag.outputs.release_tag }}
-#        body_path: release.txt
-#        files: ${{ env.FIRMWARE }}/*
+    - name: Upload firmware to release
+      uses: softprops/action-gh-release@v1
+      if: steps.tag.outputs.status == 'success' && !cancelled()
+     env:
+        GITHUB_TOKEN: ${{ secrets.RELEASES_TOKEN }}
+      with:
+        tag_name: ${{ steps.tag.outputs.release_tag }}
+        body_path: release.txt
+        files: ${{ env.FIRMWARE }}/*
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main

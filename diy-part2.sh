@@ -47,7 +47,7 @@ git clone https://github.com/kenzok8/openwrt-packages.git
 #git clone --depth=1 -b master https://github.com/vernesong/OpenClash
 
 # Add luci-app-onliner (need luci-app-nlbwmon)
-#git clone --depth=1 https://github.com/rufengsuixing/luci-app-onliner
+git clone --depth=1 https://github.com/rufengsuixing/luci-app-onliner
 
 # Add luci-app-adguardhome
 # svn co https://github.com/Lienol/openwrt/trunk/package/diy/luci-app-adguardhome
@@ -90,9 +90,9 @@ git clone --depth=1 https://github.com/tindy2013/openwrt-subconverter
 #git clone --depth=1 https://github.com/destan19/OpenAppFilter
 
 # Add driver for rtl8821cu & rtl8812au-ac
-#svn co https://github.com/project-openwrt/openwrt/branches/master/package/ctcgfw/rtl8812au-ac
-#svn co https://github.com/project-openwrt/openwrt/branches/master/package/ctcgfw/rtl8821cu
-#popd
+svn co https://github.com/project-openwrt/openwrt/branches/master/package/ctcgfw/rtl8812au-ac
+svn co https://github.com/project-openwrt/openwrt/branches/master/package/ctcgfw/rtl8821cu
+popd
 
 # Mod zzz-default-settings
 pushd package/lean/default-settings/files
@@ -125,14 +125,14 @@ sed -i '/mt7662u_rom_patch.bin/a\\techo mt76-usb disable_usb_sg=1 > $\(1\)\/etc\
 popd
 
 # Add po2lmo
-#git clone https://github.com/openwrt-dev/po2lmo.git
-#pushd po2lmo
-#make && sudo make install
-#popd
+git clone https://github.com/openwrt-dev/po2lmo.git
+pushd po2lmo
+make && sudo make install
+popd
 
 # Change default shell to zsh
 #sed -i 's/\/bin\/ash/\/usr\/bin\/zsh/g' package/base-files/files/etc/passwd
-
+#修复活动链接数到最大
 sed -i 's/net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max/net.netfilter.nf_conntrack_max net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max | head -n 1/g' feeds/luci/modules/luci-mod-admin-full/luasrc/view/admin_status/index.htm
 
 # 修复核心及添加温度显示

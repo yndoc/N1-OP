@@ -141,5 +141,5 @@ sed -i 's/net.nf_conntrack_max net.ipv4.netfilter.ip_conntrack_max/net.netfilter
 #sed -i 's/or "1"%>/or "1"%> ( <%=luci.sys.exec("expr `cat \/sys\/class\/thermal\/thermal_zone0\/temp` \/ 1000") or "?"%> \&#8451; ) /g' feeds/luci/modules/luci-mod-admin-full/luasrc/view/admin_status/index.htm
 
 # 修改插件名字（修改名字后不知道会不会对插件功能有影响，自己多测试）
-sed -i 's/"Turbo ACC 网络加速"/"ACC 网络加速"/g' package/lean/luci-app-flowoffload/po/zh-cn/flowoffload.po
-sed -i 's/"Turbo ACC 网络加速"/"ACC 网络加速"/g' package/lean/luci-app-sfe/po/zh-cn/sfe.po
+# sed -i 's/"Turbo ACC 网络加速"/"ACC 网络加速"/g' package/lean/luci-app-flowoffload/po/zh-cn/flowoffload.po
+# sed -i 's/"Turbo ACC 网络加速"/"ACC 网络加速"/g' package/lean/luci-app-sfe/po/zh-cn/sfe.po
